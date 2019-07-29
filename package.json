@@ -1,0 +1,13 @@
+{
+  "name": "repair_tetris",
+  "version": "1.0.0",
+  "description": "tetris experiment",
+  "main": "tetris.js",
+  "license": "MIT",
+  "dependencies": {
+    "bootstrap": "^4.3.1",
+    "font-awesome": "^4.7.0",
+    "jquery": "^3.4.1",
+    "popper.js": "^1.15.0"
+  }
+}

@@ -1,0 +1,40 @@
+
+
+INSTALL:
+
+# needs yarn https://yarnpkg.com/en/
+yarn install
+mv node_modules static/
+
+# server is Python 2.7.x (I know, I know...)
+virtualenv env
+source env/bin/activate
+pip install flask
+python server.py
+
+# web page is served through server.py
+# go to localhost:5000
+
+# interaction data is stored in (json object per line)
+# INTERACTION_DATA.json 
+
+
+
+# ISSUES
+pre-experiment text/questions missing
+post-experiment text/questions missing
+
+experiment timeout is a variable called "gameDuration" in static/tetris.js
+maximum game speed is a variable called "maxSpeed" in static/tetris.js
+    - this is confusing because 1 is the fastest and maxSpeed is the slowest(!)
+
+do people do one experiment or several?
+    - add participant ID to pre-experiment questions?
+
+
+
+NOTES:
+
+# original repo
+https://github.com/infusion/HTML5-Tetris
+
