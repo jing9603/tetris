@@ -8,6 +8,7 @@ mv node_modules static/
 
 # server is Python 2.7.x (I know, I know...)
 virtualenv env
+// virtualenv env --python=python2.7
 source env/bin/activate
 pip install flask
 python server.py

@@ -76,53 +76,85 @@
                         <td><i class="fa fa-bomb"></i></td>
                         <td>Drop (spacebar)</td>
                     </tr>
-                </table>
-                <button type="button" class="btn btn-primary" id="start" style="margin-top: 20px;">Start</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="game" class="container" style="display: none; margin-top:30px">
-        <canvas id="canvas"></canvas>
-
-        <div id="sidebar">
-            <canvas id="preview"></canvas>
-
-            <div id="stat">
-                Score: <span id="score">0</span><br> Lines: <span id="lines">0</span><br> Time: <span id="countdown">0:00</span><br> Speed: <span id="speed">0</span><br>
-            </div>
-        </div>
-    </div>
-
-    <div id="summary" class="container" style="display: none; margin-top:30px">
-        <div class="row justify-content-center">
-            <div class="col-8">
-                <h1>Game Over</h1>
-                <div id="state">
-                    Your Score: <span id="endScore">0</span><br> Time left: <span id="timeLeft">0</span>
+                </table><br>
+                <h6>How often do you play video games?
+                </h6>
+                <div class="radio">
+                    <input type="radio" name="videoRadios" id="video1" value="option1"> Never
                 </div>
-                <button type="button" class="btn btn-primary" id="next" style="margin-top: 20px;">Next</button>
+                <div class="radio">
+                    <input type="radio" name="videoRadios" id="video2" value="option2"> Occasionally
+                </div>
+                <div class="radio">
+                    <input type="radio" name="videoRadios" id="video3" value="option3"> Every Week
+                </div>
+                <div class="radio">
+                    <label><input type="radio" name="videoRadios" id="video4" value="option4"> Every Day</label>
+                </div>
+                <h6>Which of the following options would you choose to describe yourself as a Tetris player?
+                </h6>
+                <div class="radio">
+                    <input type="radio" name="playerRadios" id="option1" value="option5"> I have never played before
+                    <div class="radio">
+                        <input type="radio" name="playerRadios" id="option2" value="option6"> I have played a few times
+                    </div>
+                    <div class="radio">
+                        <input type="radio" name="playerRadios" id="option3" value="option7"> I have played many times
+                    </div>
+                    <div class="radio">
+                        <label><input type="radio" name="playerRadios" id="option4" value="option8"> I am an experienced player</label>
+                    </div>
+                </div>
+                <div id="scale">
+                    <h6>On a scale of 1-5, how much do you like the game Tetris? (1 = love, 5 = hate)</h6>
+
+                </div>
+                <button type="button " class="btn btn-primary " id="start " style="margin-top: 20px; ">Start</button>
             </div>
         </div>
     </div>
+
+    <div id="game " class="container " style="display: none; margin-top:30px ">
+        <canvas id="canvas "></canvas>
+
+        <div id="sidebar ">
+            <canvas id="preview "></canvas>
+
+            <div id="stat ">
+                Score: <span id="score ">0</span><br> Lines: <span id="lines ">0</span><br> Time: <span id="countdown ">0:00</span><br> Speed: <span id="speed ">0</span><br>
+            </div>
+        </div>
     </div>
 
-    <div id="postexperiment" class="container" style="display: none; margin-top:30px">
-        <div class="row justify-content-center">
-            <div class="col-8">
+    <div id="summary " class="container " style="display: none; margin-top:30px ">
+        <div class="row justify-content-center ">
+            <div class="col-8 ">
+                <h1>Game Over</h1>
+                <div id="state ">
+                    Your Score: <span id="endScore ">0</span><br> Time left: <span id="timeLeft ">0</span>
+                </div>
+                <button type="button " class="btn btn-primary " id="next " style="margin-top: 20px; ">Next</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="postexperiment " class="container " style="display: none; margin-top:30px ">
+        <div class="row justify-content-center ">
+            <div class="col-8 ">
                 <h1>Thank you!</h1>
                 <p>For a player of your skill level, do you think the game should be faster or slower?</p>
 
-                <button type="button" class="btn btn-primary" id="slower">Slower</button>
-                <button type="button" class="btn btn-primary" id="faster">Faster</button>
+                <button type="button " class="btn btn-primary " id="slower ">Slower</button>
+                <button type="button " class="btn btn-primary " id="faster ">Faster</button>
             </div>
         </div>
     </div>
 
-    <script src="static/node_modules/jquery/dist/jquery.min.js"></script>
-    <script src="static/node_modules/popper.js/dist/umd/popper.min.js"></script>
-    <script src="static/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="static/tetris.js"></script>
+    <script src="static/node_modules/jquery/dist/jquery.min.js "></script>
+    <script src="static/node_modules/popper.js/dist/umd/popper.min.js "></script>
+    <script src="static/node_modules/bootstrap/dist/js/bootstrap.min.js "></script>
+    <script src="static/tetris.js "></script>
 </body>
 
-</html
+</html>
