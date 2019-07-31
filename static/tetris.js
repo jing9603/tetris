@@ -40,7 +40,7 @@
     var STATUS_WAIT = 4;
     var gameStatus = STATUS_INIT;
     var leftWindow = false;
-    var showShadow = true;
+    var showShadow = false;
     var showPreview = true;
     var board;
     var topY;
