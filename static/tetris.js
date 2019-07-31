@@ -8,15 +8,20 @@
 
 (function(window) {
     var document = window["document"];
+    //checked values of pre-questions
+    //for "how often do you play video games" 
+    var videoGame = 0;
+    // for "describe yourself as a Tetris player"
+    var playerLevel = 0;
+    // for "how much do you like the game Tetris"
+    var slider = document.getElementById("slider");
     var canvas = document.getElementById("canvas");
     var preview = document.getElementById("preview");
     var divScore = document.getElementById("score");
-    //new added for summary page
-    var divEndScore = document.getElementById("endScore");
+    var divEndScore = document.getElementById("endScore");//show final score for summary page
     var divLines = document.getElementById("lines");
     var divCountdown = document.getElementById("countdown");
-    //new added for summary page
-    var divTimeLeft = document.getElementById("timeLeft");
+    var divTimeLeft = document.getElementById("timeLeft"); //final time left on summary page
     var divSpeed = document.getElementById("speed");
 
     var ctx = canvas.getContext("2d");
@@ -132,7 +137,10 @@
 
     $("#start").on("click", function(event) {
         console.log("start experiment event handler");
-
+        //pass the value of video radios
+        videoGame = $("input[name='videoRadios']:checked").val();
+        // pass the value of player level
+        playerLevel = $("input[name='playerRadios']:checked").val();
         startExperiment();
     });
 
@@ -147,7 +155,7 @@
         prepareBoard();
         init();
     };
-    //new added: to show the summary page
+    //to show the summary page, after the game round
     var endGame = function() {
         $("#game").hide();
         divEndScore.innerHTML = score;
@@ -192,11 +200,13 @@
 
         request.setRequestHeader("Content-type", "application/json");
         request.send(
-            JSON.stringify({
+            JSON.stringify({ 
+                score: score, //new added score,
+                videogame: videoGame, //checked option of video game frequency
+                playerlevel: playerLevel, // checked option of play level
+                slider:slider.value, // value of slider for how much they love tetris
                 speed: speed,
                 lines: clearedLines,
-                //new added
-                score: score,
                 feedback: feedback,
                 interaction: interactionData,
                 timeLeft: timeLeft,
