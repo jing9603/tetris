@@ -124,29 +124,19 @@
             <canvas id="preview"></canvas>
 
             <div id="stat">
-                Score: <span id="score">0</span><br> Lines: <span id="lines">0</span><br> Time: <span id="countdown">0:00</span><br> Speed: <span id="speed">0</span><br>
+                <b>Round:<span id="round"> 0</span>/3</b><br> Speed: <span id="speed">0</span><br> Score: <span id="score">0</span><br> Lines: <span id="lines">0</span><br> Time: <span id="countdown">0:00</span><br> 
             </div>
         </div>
     </div>
 
-    <div id="summary" class="container" style="display: none; margin-top:30px">
+    <div id="postexperiment" class="container" style="display: none; margin-top:30px">
         <div class="row justify-content-center">
             <div class="col-8">
                 <h1>Game Over</h1>
                 <div id="state">
                     Your Score: <span id="endScore">0</span><br> Time left: <span id="timeLeft">0</span>
-                </div>
-                <button type="button" class="btn btn-primary" id="next" style="margin-top: 20px;">Next</button>
-            </div>
-        </div>
-    </div>
-
-
-    <div id="postexperiment" class="container" style="display: none; margin-top:30px">
-        <div class="row justify-content-center">
-            <div class="col-8">
-                <h1>Thank you!</h1>
-                <p>We are collecting data to create a game of Tetris that helps players improve their skill level. 
+                </div><br>
+                <p class="lead">We are collecting data to create a game of Tetris that helps players improve their skill level. 
                     It should be just fast enough to feel like a challenge.<br>
                     For a player of your skill level, do you think the game you played should be faster or slower?
                 </p>

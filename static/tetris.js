@@ -160,17 +160,6 @@
         $("#game").hide();
         divEndScore.innerHTML = score;
         divTimeLeft.innerHTML = divCountdown.innerHTML;
-        $("#summary").show();
-    };
-
-    $("#next").on("click", function(event) {
-        console.log("game summary event handler");
-
-        endExperiment();
-    });
-
-    var endExperiment = function() {
-        $("#summary").hide();
         $("#postexperiment").show();
     };
 
