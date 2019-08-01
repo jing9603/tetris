@@ -14,6 +14,7 @@
     // for "describe yourself as a Tetris player"
     var playerLevel = 0;
     // for "how much do you like the game Tetris"
+    var divRound = document.getElementById("round");
     var slider = document.getElementById("slider");
     var canvas = document.getElementById("canvas");
     var preview = document.getElementById("preview");
@@ -29,6 +30,7 @@
 
     var timerVar = null;
     var startTime = null;
+    var round = 0;
     var speed = 200;
     var speedScore = 5;
     var score = 0;
@@ -146,6 +148,7 @@
 
     var startExperiment = function() {
         $("#preexperiment").hide();
+        $("#postexperiment").hide();
         $("#game").show();
 
         setRandomSpeed();
@@ -153,15 +156,24 @@
 
         preparePieces(pieces);
         prepareBoard();
+        round ++;
+        divRound.innerHTML = round;
+        console.log(videoGame, playerLevel, slider.value);//test
         init();
     };
-    //to show the summary page, after the game round
+    
     var endGame = function() {
         $("#game").hide();
         divEndScore.innerHTML = score;
         divTimeLeft.innerHTML = divCountdown.innerHTML;
         $("#postexperiment").show();
     };
+
+    var endRound = function() {
+        var end = false;
+        if(round === 3) end = true;
+        return end;
+    }
 
     $("#slower").on("click", function(event) {
         console.log("slower event handler");
@@ -180,9 +192,13 @@
 
         request.open("POST", "http://localhost:5000/feedback", true);
         request.onload = function() {
-            if (request.status >= 200 && request.status < 400) {
+            if (request.status >= 200 && request.status < 400 && endRound()) {//if round = 3, reload the page
                 window.location.reload(false);
-            } else {
+            } 
+            else if (request.status >= 200 && request.status < 400 && !endRound()){//if round < 3, restart the game
+                console.log("start a new round");//test
+                startExperiment();
+            }else {
                 $("#errormsg").show();
             }
         };
