@@ -14,7 +14,7 @@
     // for "describe yourself as a Tetris player"
     var playerLevel = 0;
     // for "how much do you like the game Tetris"
-    var divRound = document.getElementById("round");
+    var divRound = document.getElementsByName("round");
     var slider = document.getElementById("slider");
     var canvas = document.getElementById("canvas");
     var preview = document.getElementById("preview");
@@ -157,7 +157,8 @@
         preparePieces(pieces);
         prepareBoard();
         round ++;
-        divRound.innerHTML = round;
+        divRound[0].innerHTML = round;
+        divRound[1].innerHTML = round;
         console.log(videoGame, playerLevel, slider.value);//test
         init();
     };
