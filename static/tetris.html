@@ -53,8 +53,8 @@
     <div id="preexperiment" class="container" style="margin-top:30px">
         <div class="row justify-content-center">
             <div class="col-8">
-                <h1>Experiment: TETRIS</h1><br>
-                <p>Instructions for the experiment</p>
+                <h1>TETRIS Experiment</h1><br>
+                <h6>Instructions for Tetris</h6>
                 <table class="paddedCol" style="margin-left: 20px;">
                     <tr>
                         <td><i class="fa fa-arrow-left"></i></td>
@@ -77,37 +77,35 @@
                         <td>Drop (spacebar)</td>
                     </tr>
                 </table><br>
-                <h6>How often do you play video games?
-                </h6>
-                <div class="radio">
+                <h6>How often do you play video games?</h6>
+                <div class="paddedCol" style="margin-left: 35px;">
                     <input type="radio" name="videoRadios" id="video1" value="1"> Never
                 </div>
-                <div class="radio">
+                <div class="paddedCol" style="margin-left: 35px;">
                     <input type="radio" name="videoRadios" id="video2" value="2"> Occasionally
                 </div>
-                <div class="radio">
+                <div class="paddedCol" style="margin-left: 35px;">
                     <input type="radio" name="videoRadios" id="video3" value="3"> Every Week
                 </div>
-                <div class="radio">
+                <div class="paddedCol" style="margin-left: 35px;">
                     <label><input type="radio" name="videoRadios" id="video4" value="4"> Every Day</label>
                 </div>
-                <h6>Which of the following options would you choose to describe yourself as a Tetris player?
-                </h6>
-                <div class="radio">
+                <h6>Which of the following options would you choose to describe yourself as a Tetris player?</h6>
+                <div cclass="paddedCol" style="margin-left: 35px;">
                     <input type="radio" name="playerRadios" id="option1" value="1"> I have never played before
                 </div>
-                <div class="radio">
+                <div class="paddedCol" style="margin-left: 35px;">
                     <input type="radio" name="playerRadios" id="option2" value="2"> I have played a few times
                 </div>
-                <div class="radio">
+                <div class="paddedCol" style="margin-left: 35px;">
                     <input type="radio" name="playerRadios" id="option3" value="3"> I have played many times
                 </div>
-                <div class="radio">
+                <div class="paddedCol" style="margin-left: 35px;">
                     <label><input type="radio" name="playerRadios" id="option4" value="4"> I am an experienced player</label>
                 </div>
 
-                <div name="scale">
-                    <h6>On a scale of 1-5, how much do you like the game Tetris? (1 = love, 5 = hate)</h6>
+                <h6>On a scale of 1-5, how much do you like the game Tetris? (1 = love, 5 = hate)</h6>
+                <div name="scale" class="paddedCol" style="margin-left: 35px;" >
                     &nbsp<input type="range" id="slider" min="1" max="5" step="1" value="5"><br>
                     <span>1&emsp;&nbsp 2&emsp;&nbsp 3&emsp;&nbsp 4&emsp;&nbsp 5</span>
                 </div>
@@ -117,19 +115,21 @@
         </div>
     </div>
 
-    <div id="game" class="container" style="display: none; margin-top:30px">
+    <div id="game" class="container" style="display: none; margin-top:20px">
+        <div id="trialtitle" style="margin-left: 115px"><h2>TRIAL</h2></div>
+        <div id="roundtitle" style="margin-left: 85px" ><h2>Round: <span name="round">0</span>/3 </h2></div>
         <canvas id="canvas"></canvas>
 
         <div id="sidebar">
             <canvas id="preview"></canvas>
 
-            <div id="trialstat">
-                <b><span>TRIAL MODE</span></b><br>  <span>Speed: 400</span><br> Score: <span id="trialscore">0</span><br> Lines: <span id="triallines">0</span><br>
+            <div id="trialstat" style="margin-top: 5px; margin-left: 10px">
+                <span>Speed: 400</span><br> Score: <span id="trialscore">0</span><br> Lines: <span id="triallines">0</span><br>
                 <button type="button" class="btn btn-primary" id="endtrial" style="margin-top: 110px; margin-left: 25px">Ready</button>
             </div>
 
             <div id="stat">
-                <b>Round: <span name="round">0</span>/3</b><br> Speed: <span id="speed">0</span><br> Score: <span id="score">0</span><br> Lines: <span id="lines">0</span><br> Time: <span id="countdown">0:00</span><br> 
+                Speed: <span id="speed">0</span><br> Score: <span id="score">0</span><br> Lines: <span id="lines">0</span><br> Time: <span id="countdown">0:00</span><br> 
             </div>
         </div>
     </div>

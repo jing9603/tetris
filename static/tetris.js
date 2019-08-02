@@ -35,7 +35,7 @@
     var round = 0;
     var speed = 200;
     var speedScore = 5;
-    var userID = 0;
+    var userId = 0;
     var score = 0;
     var clearedLines = 0;
     var gameDuration = 120;
@@ -134,7 +134,7 @@
             event: eventtype,
             time: Date.now(),
         });
-        console.log(eventtype + " logged." + Date.now());
+        console.log(eventtype + " logged." + Date.now());//just for test
     }
 
     var storeInteraction = function(eventtype, keycode) {
@@ -147,14 +147,13 @@
     };
 
     /* end interaction data */
-
     $("#start").on("click", function(event) {
         console.log("start trial event handler");
         //pass the value of video radios
         videoGame = $("input[name='videoRadios']:checked").val();
         // pass the value of player level
         playerLevel = $("input[name='playerRadios']:checked").val();
-        if (videoGame === undefined || playerLevel === undefined) alert("Please finish the questions first.")
+        if (videoGame === undefined || playerLevel === undefined) alert("Questionnaire incomplete.")
         else startTrial();
     });
 
@@ -165,9 +164,12 @@
         $("#preexperiment").hide();
         $("#game").show();
         document.getElementById("stat").style.display = "none";
+        document.getElementById("roundtitle").style.display = "none";
+        
         speed = 400;
+        setRandomId();
         setTime(gameDuration);
-
+        
         preparePieces(pieces);
         prepareBoard();
 
@@ -184,6 +186,8 @@
         $("#postexperiment").hide();
         $("#game").show();
         document.getElementById("trialstat").style.display = "none";
+        document.getElementById("trialtitle").style.display = "none";
+        document.getElementById("roundtitle").style.display = "block";
         document.getElementById("stat").style.display = "block";
         
         console.log(videoGame, playerLevel, slider.value);//test
@@ -246,6 +250,7 @@
         request.setRequestHeader("Content-type", "application/json");
         request.send(
             JSON.stringify({ 
+                userid: userId, //a random generated id for each participant
                 score: score, //new added score,
                 videogame: videoGame, //checked option of video game frequency
                 playerlevel: playerLevel, // checked option of play level
@@ -280,9 +285,10 @@
         divRound[1].innerHTML = round;
     }
 
-    // var setUserId = function() {
-    //     var 
-    // }
+    var setRandomId = function() {
+        //give a random id with 6 figures
+        userId = Math.round(Math.random()*1000000);
+    }
 
     var setRandomColour = function(p) {
         var c = colours[Math.floor(Math.random() * colours.length)];
@@ -410,7 +416,7 @@
      * Integrate the current piece into the board
      */
     var integratePiece = function() {
-        storeInteractionEvent("nocontrol");//mark the timestamp of can not control
+        storeInteractionEvent("piecedown");//mark the timestamp of can not control
         var cur = curPiece[direction];
 
         for (var i = 0; i < cur.length; i += 2) {
@@ -675,7 +681,6 @@
         var cnt = 4;
 
         prepareBoard();
-        storeInteractionEvent("gamestart");
         curPiece = getNextPiece();
         nextPiece = getNextPiece();
 
@@ -684,7 +689,6 @@
         updatePreview();
 
         gameStatus = STATUS_INIT;
-
         score = clearedLines = 0;
 
         animate(
@@ -709,6 +713,7 @@
                 ctx.fillText(cnt, (canvas.width - size.width) / 2, canvas.height / 3);
             },
             function() {
+                storeInteractionEvent("gamestart");
                 gameStatus = STATUS_PLAY;
                 storeInteractionEvent("pieceappear");
                 loop();
