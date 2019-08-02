@@ -128,6 +128,14 @@
     var currentPiece = -1;
     var timeLeft = gameDuration;
     var interactionData = [];
+    
+    var storeInteractionEvent = function(eventtype) {
+        interactionData.push({
+            event: eventtype,
+            time: Date.now(),
+        });
+        console.log(eventtype + " logged." + Date.now());
+    }
 
     var storeInteraction = function(eventtype, keycode) {
         interactionData.push({
@@ -175,7 +183,6 @@
         // $("#preexperiment").hide();
         $("#postexperiment").hide();
         $("#game").show();
-
         document.getElementById("trialstat").style.display = "none";
         document.getElementById("stat").style.display = "block";
         
@@ -332,6 +339,7 @@
         calcInitCoord();
 
         updatePreview();
+        storeInteractionEvent("pieceappear");
     };
 
     /**
@@ -402,6 +410,7 @@
      * Integrate the current piece into the board
      */
     var integratePiece = function() {
+        storeInteractionEvent("nocontrol");//mark the timestamp of can not control
         var cur = curPiece[direction];
 
         for (var i = 0; i < cur.length; i += 2) {
@@ -422,6 +431,7 @@
         }
 
         updateScore(speedScore);
+        // test use: console.log(Date.now());
     };
 
     /**
@@ -429,6 +439,7 @@
      */
     var gameOver = function() {
         gameStatus = STATUS_GAMEOVER;
+        storeInteractionEvent("gameover");
         timeLeft = gameDuration * 1000 - (new Date() - startTime);
         clearInterval(timerVar);
         endGame();
@@ -493,13 +504,13 @@
         if (remove.length > 0) {
             if (flashTime > 0) {
                 gameStatus = STATUS_WAIT;
+                storeInteractionEvent("flashstart");
                 pauseLoop();
 
                 animate(
                     flashTime,
                     function(pos) {
                         var cond = (pos * 10) & 1;
-
                         // Simply paint a flash effect over the current tiles
                         for (var i = 0; i < remove.length; i++) {
                             for (var x = tilesX; x--;) {
@@ -517,6 +528,7 @@
                         newPiece();
 
                         draw();
+                        storeInteractionEvent("flashover");
                         gameStatus = STATUS_PLAY;
                         loop();
                     },
@@ -524,7 +536,6 @@
                 );
             } else {
                 removeLines(remove);
-
                 newPiece();
 
                 draw();
@@ -664,7 +675,7 @@
         var cnt = 4;
 
         prepareBoard();
-
+        storeInteractionEvent("gamestart");
         curPiece = getNextPiece();
         nextPiece = getNextPiece();
 
@@ -699,6 +710,7 @@
             },
             function() {
                 gameStatus = STATUS_PLAY;
+                storeInteractionEvent("pieceappear");
                 loop();
 
                 startTime = new Date();
