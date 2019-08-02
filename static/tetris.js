@@ -253,6 +253,7 @@
      */
     var clearRecords = function() {
         clearInterval(timerVar);
+        interactionData = [];
         divSpeed.innerHTML = 0;//reset speed to 0
         divScore.innerHTML = 0;//clear the scores on screens
         divLines.innerHTML = 0;//clear the lines cleared on screens
