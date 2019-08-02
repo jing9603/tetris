@@ -35,6 +35,7 @@
     var round = 0;
     var speed = 200;
     var speedScore = 5;
+    var userID = 0;
     var score = 0;
     var clearedLines = 0;
     var gameDuration = 120;
@@ -145,7 +146,8 @@
         videoGame = $("input[name='videoRadios']:checked").val();
         // pass the value of player level
         playerLevel = $("input[name='playerRadios']:checked").val();
-        startTrial();
+        if (videoGame === undefined || playerLevel === undefined) alert("Please finish the questions first.")
+        else startTrial();
     });
 
     /**
@@ -221,7 +223,10 @@
         request.open("POST", "http://localhost:5000/feedback", true);
         request.onload = function() {
             if (request.status >= 200 && request.status < 400 && endRound()) {//if round = 3, reload the page
-                window.location.reload(false);
+                // window.location.reload(false);
+                $("#game").hide();
+                $("#postexperiment").hide();
+                $("#ending").show();
             } 
             else if (request.status >= 200 && request.status < 400 && !endRound()){//if round < 3, restart the game
                 console.log("start a new round");//test
@@ -267,6 +272,11 @@
         divRound[0].innerHTML = round;
         divRound[1].innerHTML = round;
     }
+
+    // var setUserId = function() {
+    //     var 
+    // }
+
     var setRandomColour = function(p) {
         var c = colours[Math.floor(Math.random() * colours.length)];
         p[PIECE_COLOR] = "rgb(" + c[0] + "," + c[1] + "," + c[2] + ")";

@@ -108,7 +108,7 @@
 
                 <div name="scale">
                     <h6>On a scale of 1-5, how much do you like the game Tetris? (1 = love, 5 = hate)</h6>
-                    &nbsp<input type="range" id="slider" min="1" max="5" step="1"><br>
+                    &nbsp<input type="range" id="slider" min="1" max="5" step="1" value="5"><br>
                     <span>1&emsp;&nbsp 2&emsp;&nbsp 3&emsp;&nbsp 4&emsp;&nbsp 5</span>
                 </div>
 
@@ -122,7 +122,7 @@
 
         <div id="sidebar">
             <canvas id="preview"></canvas>
-            
+
             <div id="trialstat">
                 <b><span>TRIAL MODE</span></b><br>  <span>Speed: 400</span><br> Score: <span id="trialscore">0</span><br> Lines: <span id="triallines">0</span><br>
                 <button type="button" class="btn btn-primary" id="endtrial" style="margin-top: 110px; margin-left: 25px">Ready</button>
@@ -141,7 +141,7 @@
                 <div id="state">
                     <b>Round: <span name="round">0</span>/3</b><br> Your Score: <span id="endScore">0</span><br> Time left: <span id="timeLeft">0</span>
                 </div><br>
-                <p class="lead">We are collecting data to create a game of Tetris that helps players improve their skill level. 
+                <p>We are collecting data to create a game of Tetris that helps players improve their skill level. 
                     It should be just fast enough to feel like a challenge.<br>
                     For a player of your skill level, do you think the game you played should be faster or slower?
                 </p>
@@ -150,6 +150,10 @@
                 <button type="button" class="btn btn-primary" id="faster">Faster</button>
             </div>
         </div>
+    </div>
+
+    <div id="ending" class="container" style="display: none; margin-top:30px">
+        <div class="row justify-content-center"><h2>Thank you for participating!</h2></div>
     </div>
 
     <script src="static/node_modules/jquery/dist/jquery.min.js"></script>
