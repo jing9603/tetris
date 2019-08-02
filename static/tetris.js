@@ -19,8 +19,10 @@
     var canvas = document.getElementById("canvas");
     var preview = document.getElementById("preview");
     var divScore = document.getElementById("score");
+    var divTrialScore = document.getElementById("trialscore");//show score in trial
     var divEndScore = document.getElementById("endScore");//show final score for summary page
     var divLines = document.getElementById("lines");
+    var divTrialLines = document.getElementById("triallines");//show cleared lines in trial
     var divCountdown = document.getElementById("countdown");
     var divTimeLeft = document.getElementById("timeLeft"); //final time left on summary page
     var divSpeed = document.getElementById("speed");
@@ -138,28 +140,53 @@
     /* end interaction data */
 
     $("#start").on("click", function(event) {
-        console.log("start experiment event handler");
+        console.log("start trial event handler");
         //pass the value of video radios
         videoGame = $("input[name='videoRadios']:checked").val();
         // pass the value of player level
         playerLevel = $("input[name='playerRadios']:checked").val();
+        startTrial();
+    });
+
+    /**
+     * start the trial mode with no count down and fixed speed
+     */
+    var startTrial = function() {
+        $("#preexperiment").hide();
+        $("#game").show();
+        document.getElementById("stat").style.display = "none";
+        speed = 400;
+        setTime(gameDuration);
+
+        preparePieces(pieces);
+        prepareBoard();
+
+        init();
+    }
+
+    $("#endtrial").on("click", function(event) {
+        console.log("start experiment event handler");
         startExperiment();
     });
 
     var startExperiment = function() {
-        $("#preexperiment").hide();
+        // $("#preexperiment").hide();
         $("#postexperiment").hide();
         $("#game").show();
 
+        document.getElementById("trialstat").style.display = "none";
+        document.getElementById("stat").style.display = "block";
+        
+        console.log(videoGame, playerLevel, slider.value);//test
+
+        clearRecords();
+        updateRound();
         setRandomSpeed();
         setTime(gameDuration);
 
         preparePieces(pieces);
         prepareBoard();
-        round ++;
-        divRound[0].innerHTML = round;
-        divRound[1].innerHTML = round;
-        console.log(videoGame, playerLevel, slider.value);//test
+        
         init();
     };
     
@@ -221,6 +248,24 @@
         );
     };
 
+    /**
+     * clear all the records on board
+     */
+    var clearRecords = function() {
+        clearInterval(timerVar);
+        divSpeed.innerHTML = 0;//reset speed to 0
+        divScore.innerHTML = 0;//clear the scores on screens
+        divLines.innerHTML = 0;//clear the lines cleared on screens
+    }
+
+    /**
+     * update the round count on board
+     */
+    var updateRound = function() {
+        round ++;
+        divRound[0].innerHTML = round;
+        divRound[1].innerHTML = round;
+    }
     var setRandomColour = function(p) {
         var c = colours[Math.floor(Math.random() * colours.length)];
         p[PIECE_COLOR] = "rgb(" + c[0] + "," + c[1] + "," + c[2] + ")";
@@ -510,6 +555,9 @@
 
         divScore.innerHTML = score;
         divLines.innerHTML = clearedLines;
+        //update the score at trial
+        divTrialScore.innerHTML = score;
+        divTrialLines.innerHTML = clearedLines;
     };
 
     /**
