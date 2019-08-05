@@ -1,5 +1,6 @@
 from sys import stderr, exit, argv
 from flask import Flask, jsonify, request, session, escape
+import json
 
 
 app = Flask(__name__, static_url_path='/static')
@@ -10,7 +11,7 @@ def store_feedback() :
     print >> stderr, post
 
     with open('INTERACTION_DATA.json', 'a') as f :
-        print >> f, post
+        print >> f, json.dumps(post)
 
     return jsonify({}), 200
 

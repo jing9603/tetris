@@ -60,7 +60,8 @@
     var PIECE_ROTATABLE = 1;
     var PIECE_COLOR = 2;
     var PIECE_SHAPE = 3;
-    var direction = PIECE_SHAPE;
+    var currentDirection = PIECE_SHAPE;
+    var nextDirection = currentDirection;
     var pixelRatio = window["devicePixelRatio"] || 1;
     var pieces = [
         [
@@ -124,16 +125,41 @@
     var flashTime = 350;
 
     /* interaction data, does not affect game */
+    var minSpeed = 100;
     var maxSpeed = 500;
-    var currentPiece = -1;
+    var currentPieceIndex = -1;
+    var nextPieceIndex = -1;
     var timeLeft = gameDuration;
     var interactionData = [];
+    var trialrun = false;
+
+    var resetSpeeds = function() {
+        minSpeed = 100;
+        maxSpeed = 500;
+    }
     
     var storeInteractionEvent = function(eventtype) {
-        interactionData.push({
-            event: eventtype,
-            time: Date.now(),
-        });
+        if(eventtype === "pieceappear") {
+            interactionData.push({
+                event: eventtype,
+                time: Date.now(),
+                piece: currentPieceIndex,
+                board: encodeBoard(board)
+            });
+        }
+        else if(eventtype === "piecedown") {
+            interactionData.push({
+                event: eventtype,
+                time: Date.now(),
+                piece: currentPieceIndex
+            });
+        }
+        else {
+            interactionData.push({
+                event: eventtype,
+                time: Date.now()
+            });
+        }
         console.log(eventtype + " logged." + Date.now());//just for test
     }
 
@@ -142,7 +168,7 @@
             event: eventtype,
             keycode: keycode,
             time: Date.now(),
-            piece: currentPiece
+            piece: currentPieceIndex
         });
     };
 
@@ -166,6 +192,7 @@
         document.getElementById("stat").style.display = "none";
         document.getElementById("roundtitle").style.display = "none";
         
+        trialrun = true;
         speed = 400;
         setRandomId();
         setTime(gameDuration);
@@ -177,6 +204,12 @@
     }
 
     $("#endtrial").on("click", function(event) {
+
+        if(gameStatus === STATUS_INIT) {
+            return;
+        }
+
+        trialrun = false;
         console.log("start experiment event handler");
         startExperiment();
     });
@@ -192,6 +225,10 @@
         
         console.log(videoGame, playerLevel, slider.value);//test
 
+        if(round === 0) {
+            resetSpeeds();
+        }
+
         clearRecords();
         updateRound();
         setRandomSpeed();
@@ -204,6 +241,11 @@
     };
     
     var endGame = function() {
+        if(trialrun) {
+            startTrial();
+            return;
+        }
+
         $("#game").hide();
         divEndScore.innerHTML = score;
         divTimeLeft.innerHTML = divCountdown.innerHTML;
@@ -218,11 +260,13 @@
 
     $("#slower").on("click", function(event) {
         console.log("slower event handler");
+        minSpeed = speed + 1; // i know this looks wrong, but it is right
         sendFeedback("less");
     });
 
     $("#faster").on("click", function(event) {
         console.log("faster event handler");
+        maxSpeed = speed - 1; // i know this looks wrong, but it is right
         sendFeedback("more");
     });
 
@@ -260,7 +304,7 @@
                 feedback: feedback,
                 interaction: interactionData,
                 timeLeft: timeLeft,
-                board: board
+                board: encodeBoard(board)
             })
         );
     };
@@ -271,7 +315,7 @@
     var clearRecords = function() {
         clearInterval(timerVar);
         interactionData = [];
-        divSpeed.innerHTML = 0;//reset speed to 0
+        //divSpeed.innerHTML = 0;//reset speed to 0
         divScore.innerHTML = 0;//clear the scores on screens
         divLines.innerHTML = 0;//clear the lines cleared on screens
     }
@@ -297,8 +341,25 @@
 
     var setRandomSpeed = function() {
         //limit the range of speed to [100, 600]
-        speed = Math.floor(Math.random() * maxSpeed) + 100;
+        speed = Math.floor(Math.random() * (maxSpeed - minSpeed)) + minSpeed;
+        console.log("SPEEDS:", minSpeed, maxSpeed, speed);
         // speed = 400;
+    };
+
+    var encodeBoard = function() {
+        var tmp = "";
+        for (var y = 0; y < tilesY; y++) {
+            for(var x = 0; x < tilesX; x++) {
+                if(board[y][x] === undefined) {
+                    tmp = tmp.concat("o");    
+                }
+                else {
+                    tmp = tmp.concat("x");    
+                }
+            }
+        }
+        console.log(tmp);
+        return tmp;
     };
 
     /**
@@ -325,14 +386,18 @@
         var rnd = Math.random();
         for (var i = pieces.length; i--;) {
             if (rnd < pieces[i][PIECE_PROBABILITY]) {
-                currentPiece = i;
+                nextPieceIndex = i;
+                nextDirection = (PIECE_SHAPE + Math.random() * 4) | 0;
                 setRandomColour(pieces[i]);
-                return pieces[i];
+                //return pieces[i];
+                return JSON.parse(JSON.stringify(pieces[i]));
             }
             rnd -= pieces[i][PIECE_PROBABILITY];
         }
-        currentPiece = 0;
-        return pieces[0];
+        nextPieceIndex = 0;
+        setRandomColour(pieces[i]);
+        //return pieces[0];
+        return JSON.parse(JSON.stringify(pieces[0]));
     };
 
     /**
@@ -340,6 +405,9 @@
      */
     var newPiece = function() {
         curPiece = nextPiece;
+        currentPieceIndex = nextPieceIndex;
+        currentDirection = nextDirection;
+
         nextPiece = getNextPiece();
 
         calcInitCoord();
@@ -354,9 +422,9 @@
     var calcInitCoord = function() {
         var minY = -10;
 
-        var cur = curPiece[direction];
+        var cur = curPiece[currentDirection];
 
-        direction = (PIECE_SHAPE + Math.random() * 4) | 0;
+        //direction = (PIECE_SHAPE + Math.random() * 4) | 0;
 
         for (var i = 0; i < cur.length; i += 2) {
             minY = Math.max(minY, cur[i + 1]);
@@ -372,7 +440,7 @@
      * @returns {boolean} Indicator if it's possible to move
      */
     var tryDown = function(newY) {
-        var cur = curPiece[direction];
+        var cur = curPiece[currentDirection];
 
         for (var i = 0; i < cur.length; i += 2) {
             var x = cur[i] + curX;
@@ -408,7 +476,7 @@
             }
         }
         curX = newX;
-        direction = dir;
+        currentDirection = dir;
         return true;
     };
 
@@ -417,7 +485,7 @@
      */
     var integratePiece = function() {
         storeInteractionEvent("piecedown");//mark the timestamp of can not control
-        var cur = curPiece[direction];
+        var cur = curPiece[currentDirection];
 
         for (var i = 0; i < cur.length; i += 2) {
             // Check for game over
@@ -530,11 +598,11 @@
                     },
                     function() {
                         removeLines(remove);
+                        storeInteractionEvent("flashover");
 
                         newPiece();
 
                         draw();
-                        storeInteractionEvent("flashover");
                         gameStatus = STATUS_PLAY;
                         loop();
                     },
@@ -559,7 +627,8 @@
             integratePiece();
         }
 
-        draw();
+        if(gameStatus !== STATUS_INIT)
+            draw();
 
         if (gameStatus === STATUS_PLAY) {
             loopTimeout = window.setTimeout(loop, speed);
@@ -682,6 +751,8 @@
 
         prepareBoard();
         curPiece = getNextPiece();
+        currentPieceIndex = nextPieceIndex;
+        currentDirection = nextDirection;
         nextPiece = getNextPiece();
 
         calcInitCoord();
@@ -719,7 +790,10 @@
                 loop();
 
                 startTime = new Date();
-                timerVar = setInterval(handleTime, 100);
+
+                if(! trialrun) {
+                    timerVar = setInterval(handleTime, 100);
+                }
             },
             1000
         );
@@ -747,7 +821,7 @@
         // Should be fine and also the standard way to go
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        var cur = curPiece[direction];
+        var cur = curPiece[currentDirection];
 
         for (var y = tilesY; y--;) {
             // Draw board
@@ -790,7 +864,7 @@
 
         ptx.clearRect(0, 0, preview.width, preview.height);
 
-        var cur = nextPiece[direction];
+        var cur = nextPiece[nextDirection];
 
         for (var i = 0; i < cur.length; i += 2) {
             //drawTile(ptx, cur[i] + 5, cur[i + 1] + 5, nextPiece[PIECE_COLOR]);
@@ -934,9 +1008,9 @@
         var s = gameDuration - (d - startTime) / 1000;
 
         setTime(s);
-        divSpeed.innerHTML = speed;
+        //divSpeed.innerHTML = speed;
 
-        if (s < 0) {
+        if ((s < 0) && (gameStatus !== STATUS_GAMEOVER)) {
             //new added: changed 'done' to finished'
             divCountdown.innerHTML = "Finished!";
             gameOver();
@@ -952,15 +1026,15 @@
 
         switch (ev.keyCode) {
             case 37: // left
-                tryMove(curX - 1, direction);
+                tryMove(curX - 1, currentDirection);
                 draw();
                 break;
             case 39: // right
-                tryMove(curX + 1, direction);
+                tryMove(curX + 1, currentDirection);
                 draw();
                 break;
             case 38: // up
-                tryMove(curX, PIECE_SHAPE + ((direction - PIECE_SHAPE + 1) % 4));
+                tryMove(curX, PIECE_SHAPE + ((currentDirection - PIECE_SHAPE + 1) % 4));
                 draw();
                 break;
             case 40: // down
