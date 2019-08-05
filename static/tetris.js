@@ -26,6 +26,8 @@
     var divCountdown = document.getElementById("countdown");
     var divTimeLeft = document.getElementById("timeLeft"); //final time left on summary page
     var divSpeed = document.getElementById("speed");
+    var age = document.getElementById("age");
+    var gender = document.getElementById("gender");
 
     var ctx = canvas.getContext("2d");
     var ptx = preview.getContext("2d");
@@ -172,6 +174,14 @@
         });
     };
 
+    //for the age drop down
+    $(function(){
+        var $select = $("#age");
+        for (i=1;i<=100;i++){
+            $select.append($('<option></option>').val(i).html(i))
+        }
+    });
+
     /* end interaction data */
     $("#start").on("click", function(event) {
         console.log("start trial event handler");
@@ -181,6 +191,7 @@
         playerLevel = $("input[name='playerRadios']:checked").val();
         if (videoGame === undefined || playerLevel === undefined) alert("Questionnaire incomplete.")
         else startTrial();
+        console.log(age.value, gender.value);
     });
 
     /**
@@ -295,6 +306,8 @@
         request.send(
             JSON.stringify({ 
                 userid: userId, //a random generated id for each participant
+                gender: gender.value,
+                age: age.value,
                 score: score, //new added score,
                 videogame: videoGame, //checked option of video game frequency
                 playerlevel: playerLevel, // checked option of play level
