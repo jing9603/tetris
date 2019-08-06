@@ -19,10 +19,10 @@
     var canvas = document.getElementById("canvas");
     var preview = document.getElementById("preview");
     var divScore = document.getElementById("score");
-    var divTrialScore = document.getElementById("trialscore");//show score in trial
-    var divEndScore = document.getElementById("endScore");//show final score for summary page
+    var divTrialScore = document.getElementById("trialscore"); //show score in trial
+    var divEndScore = document.getElementById("endScore"); //show final score for summary page
     var divLines = document.getElementById("lines");
-    var divTrialLines = document.getElementById("triallines");//show cleared lines in trial
+    var divTrialLines = document.getElementById("triallines"); //show cleared lines in trial
     var divCountdown = document.getElementById("countdown");
     var divTimeLeft = document.getElementById("timeLeft"); //final time left on summary page
     var divSpeed = document.getElementById("speed");
@@ -139,30 +139,28 @@
         minSpeed = 100;
         maxSpeed = 500;
     }
-    
+
     var storeInteractionEvent = function(eventtype) {
-        if(eventtype === "pieceappear") {
+        if (eventtype === "pieceappear") {
             interactionData.push({
                 event: eventtype,
                 time: Date.now(),
                 piece: currentPieceIndex,
                 board: encodeBoard(board)
             });
-        }
-        else if(eventtype === "piecedown") {
+        } else if (eventtype === "piecedown") {
             interactionData.push({
                 event: eventtype,
                 time: Date.now(),
                 piece: currentPieceIndex
             });
-        }
-        else {
+        } else {
             interactionData.push({
                 event: eventtype,
                 time: Date.now()
             });
         }
-        console.log(eventtype + " logged." + Date.now());//just for test
+        console.log(eventtype + " logged." + Date.now()); //just for test
     }
 
     var storeInteraction = function(eventtype, keycode) {
@@ -175,9 +173,9 @@
     };
 
     //for the age drop down
-    $(function(){
+    $(function() {
         var $select = $("#age");
-        for (i=1;i<=100;i++){
+        for (i = 1; i <= 100; i++) {
             $select.append($('<option></option>').val(i).html(i))
         }
     });
@@ -189,9 +187,9 @@
         videoGame = $("input[name='videoRadios']:checked").val();
         // pass the value of player level
         playerLevel = $("input[name='playerRadios']:checked").val();
-        if (videoGame === undefined || playerLevel === undefined) alert("Questionnaire incomplete.")
+        if (videoGame === undefined || playerLevel === undefined || gender.value === "empty" || age.value === "empty")
+            alert("Questionnaire incomplete.")
         else startTrial();
-        console.log(age.value, gender.value);
     });
 
     /**
@@ -202,12 +200,12 @@
         $("#game").show();
         document.getElementById("stat").style.display = "none";
         document.getElementById("roundtitle").style.display = "none";
-        
+
         trialrun = true;
         speed = 400;
         setRandomId();
         setTime(gameDuration);
-        
+
         preparePieces(pieces);
         prepareBoard();
 
@@ -216,7 +214,7 @@
 
     $("#endtrial").on("click", function(event) {
 
-        if(gameStatus === STATUS_INIT) {
+        if (gameStatus === STATUS_INIT) {
             return;
         }
 
@@ -233,10 +231,10 @@
         document.getElementById("trialtitle").style.display = "none";
         document.getElementById("roundtitle").style.display = "block";
         document.getElementById("stat").style.display = "block";
-        
-        console.log(videoGame, playerLevel, slider.value);//test
 
-        if(round === 0) {
+        console.log(videoGame, playerLevel, slider.value); //test
+
+        if (round === 0) {
             resetSpeeds();
         }
 
@@ -247,12 +245,12 @@
 
         preparePieces(pieces);
         prepareBoard();
-        
+
         init();
     };
-    
+
     var endGame = function() {
-        if(trialrun) {
+        if (trialrun) {
             startTrial();
             return;
         }
@@ -265,7 +263,7 @@
 
     var endRound = function() {
         var end = false;
-        if(round === 3) end = true;
+        if (round === 3) end = true;
         return end;
     }
 
@@ -288,30 +286,29 @@
 
         request.open("POST", "http://localhost:5000/feedback", true);
         request.onload = function() {
-            if (request.status >= 200 && request.status < 400 && endRound()) {//if round = 3, reload the page
+            if (request.status >= 200 && request.status < 400 && endRound()) { //if round = 3, reload the page
                 // window.location.reload(false);
                 $("#game").hide();
                 $("#postexperiment").hide();
                 $("#ending").show();
-            } 
-            else if (request.status >= 200 && request.status < 400 && !endRound()){//if round < 3, restart the game
-                console.log("start a new round");//test
+            } else if (request.status >= 200 && request.status < 400 && !endRound()) { //if round < 3, restart the game
+                console.log("start a new round"); //test
                 startExperiment();
-            }else {
+            } else {
                 $("#errormsg").show();
             }
         };
 
         request.setRequestHeader("Content-type", "application/json");
         request.send(
-            JSON.stringify({ 
+            JSON.stringify({
                 userid: userId, //a random generated id for each participant
                 gender: gender.value,
                 age: age.value,
                 score: score, //new added score,
                 videogame: videoGame, //checked option of video game frequency
                 playerlevel: playerLevel, // checked option of play level
-                slider:slider.value, // value of slider for how much they love tetris
+                slider: slider.value, // value of slider for how much they love tetris
                 speed: speed,
                 lines: clearedLines,
                 feedback: feedback,
@@ -329,22 +326,22 @@
         clearInterval(timerVar);
         interactionData = [];
         //divSpeed.innerHTML = 0;//reset speed to 0
-        divScore.innerHTML = 0;//clear the scores on screens
-        divLines.innerHTML = 0;//clear the lines cleared on screens
+        divScore.innerHTML = 0; //clear the scores on screens
+        divLines.innerHTML = 0; //clear the lines cleared on screens
     }
 
     /**
      * update the round count on board
      */
     var updateRound = function() {
-        round ++;
+        round++;
         divRound[0].innerHTML = round;
         divRound[1].innerHTML = round;
     }
 
     var setRandomId = function() {
         //give a random id with 6 figures
-        userId = Math.round(Math.random()*1000000);
+        userId = Math.round(Math.random() * 1000000);
     }
 
     var setRandomColour = function(p) {
@@ -362,12 +359,11 @@
     var encodeBoard = function() {
         var tmp = "";
         for (var y = 0; y < tilesY; y++) {
-            for(var x = 0; x < tilesX; x++) {
-                if(board[y][x] === undefined) {
-                    tmp = tmp.concat("o");    
-                }
-                else {
-                    tmp = tmp.concat("x");    
+            for (var x = 0; x < tilesX; x++) {
+                if (board[y][x] === undefined) {
+                    tmp = tmp.concat("o");
+                } else {
+                    tmp = tmp.concat("x");
                 }
             }
         }
@@ -497,7 +493,7 @@
      * Integrate the current piece into the board
      */
     var integratePiece = function() {
-        storeInteractionEvent("piecedown");//mark the timestamp of can not control
+        storeInteractionEvent("piecedown"); //mark the timestamp of can not control
         var cur = curPiece[currentDirection];
 
         for (var i = 0; i < cur.length; i += 2) {
@@ -640,7 +636,7 @@
             integratePiece();
         }
 
-        if(gameStatus !== STATUS_INIT)
+        if (gameStatus !== STATUS_INIT)
             draw();
 
         if (gameStatus === STATUS_PLAY) {
@@ -804,7 +800,7 @@
 
                 startTime = new Date();
 
-                if(! trialrun) {
+                if (!trialrun) {
                     timerVar = setInterval(handleTime, 100);
                 }
             },
